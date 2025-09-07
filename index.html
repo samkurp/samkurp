@@ -60,9 +60,10 @@
                 console.log('Загрузка данных...');
                 
                 // Прямая ссылка на raw файл GitHub
-                const timestamp = new Date().getTime();
-                const response = await fetch(`https://raw.githubusercontent.com/samkurp/samkurp/main/data/patrols_data.json?t=${timestamp}`);
                 
+                const timestamp = new Date().getTime();
+                // В функции loadData замените URL на:
+                const response = await fetch(`https://samkurp.github.io/samkurp/data/patrols_data.json?t=${timestamp}`);
                 console.log('Статус ответа:', response.status);
                 
                 if (!response.ok) {
@@ -156,3 +157,4 @@
     </script>
 </body>
 </html>
+
