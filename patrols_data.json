@@ -2,17 +2,17 @@
   {
     "user_id": 566632214,
     "username": "samkurp",
-    "latitude": 55.393428,
-    "longitude": 37.809094,
-    "timestamp": 1757239613.0,
-    "date": "2025-09-07 10:06:53"
-  },
-  {
-    "user_id": 566632214,
-    "username": "samkurp",
     "latitude": 55.377553,
     "longitude": 37.825583,
     "timestamp": 1757242933.0,
     "date": "07 сентября 2025 11:02"
+  },
+  {
+    "user_id": 566632214,
+    "username": "samkurp",
+    "latitude": 55.398926,
+    "longitude": 37.846537,
+    "timestamp": 1757246324.0,
+    "date": "07 сентября 2025 11:58"
   }
 ]
