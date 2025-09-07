@@ -8,28 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Карта патрулей ДПС</h1>
-            <div class="controls">
-                <button id="refresh-btn">Обновить данные</button>
-                <div class="filter">
-                    <label>
-                        <input type="checkbox" id="auto-refresh" checked>
-                        Автообновление (30 сек)
-                    </label>
-                </div>
-            </div>
-        </header>
-        
-        <div id="map"></div>
-        
-        <div class="info-panel">
-            <h3>Последние обновления</h3>
-            <div id="updates-list"></div>
-        </div>
-    </div>
-
+    <div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
