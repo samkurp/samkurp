@@ -17,5 +17,16 @@
     "severity": 1,
     "severity_color": "#27ae60",
     "severity_name": "Низкая"
+  },
+  {
+    "user_id": 1146293556,
+    "username": "Julia_eclipce",
+    "latitude": 55.393818,
+    "longitude": 37.825946,
+    "timestamp": 1757247628.0,
+    "date": "2025-09-07 12:20:28",
+    "severity": 2,
+    "severity_color": "#f39c12",
+    "severity_name": "Средняя"
   }
 ]
