@@ -1,10 +1,66 @@
 [
   {
+    "user_id": 566632214,
+    "username": "samkurp",
+    "latitude": 55.394374,
+    "longitude": 37.827761,
+    "timestamp": 1757219835.0,
+    "date": "2025-09-07 04:37:15"
+  },
+  {
+    "user_id": 566632214,
+    "username": "samkurp",
+    "latitude": 55.398962,
+    "longitude": 37.813491,
+    "timestamp": 1757225229.0,
+    "date": "2025-09-07 06:07:09"
+  },
+  {
+    "user_id": 566632214,
+    "username": "samkurp",
+    "latitude": 55.39393,
+    "longitude": 37.827765,
+    "timestamp": 1757226408.0,
+    "date": "2025-09-07 06:26:48"
+  },
+  {
+    "user_id": 566632214,
+    "username": "samkurp",
+    "latitude": 55.407432,
+    "longitude": 37.770776,
+    "timestamp": 1757226709.0,
+    "date": "2025-09-07 06:31:49"
+  },
+  {
+    "user_id": 566632214,
+    "username": "samkurp",
+    "latitude": 55.370756,
+    "longitude": 37.840485,
+    "timestamp": 1757227208.0,
+    "date": "2025-09-07 06:40:08"
+  },
+  {
+    "user_id": 566632214,
+    "username": "samkurp",
+    "latitude": 55.393989,
+    "longitude": 37.827846,
+    "timestamp": 1757227735.0,
+    "date": "2025-09-07 06:48:55"
+  },
+  {
     "user_id": 1146293556,
     "username": "Julia_eclipce",
     "latitude": 55.394099,
     "longitude": 37.827884,
     "timestamp": 1757228043.0,
     "date": "2025-09-07 06:54:03"
+  },
+  {
+    "user_id": 566632214,
+    "username": "samkurp",
+    "latitude": 55.426866,
+    "longitude": 37.889311,
+    "timestamp": 1757228425.0,
+    "date": "2025-09-07 07:00:25"
   }
 ]
