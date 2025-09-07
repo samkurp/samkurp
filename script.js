@@ -6,8 +6,8 @@ class PatrolMap {
         this.autoRefreshInterval = null;
         
         this.initMap();
-        this.setupEventListeners();
         this.loadData();
+        this.startAutoRefresh();
     }
     
     initMap() {
@@ -21,13 +21,12 @@ class PatrolMap {
         }).addTo(this.map);
     }
     
-    setupEventListeners() {
-        document.getElementById('refresh-btn').addEventListener('click', () => {
-            this.loadData();
-        });
-        
-        document.getElementById('auto-refresh').addEventListener('change', (e) => {
-            this.toggleAutoRefresh(e.target.checked);
+    createCustomIcon() {
+        return L.divIcon({
+            className: 'patrol-marker',
+            html: '<div class="marker-icon"></div>',
+            iconSize: [32, 32],
+            iconAnchor: [16, 16]
         });
     }
     
@@ -42,11 +41,9 @@ class PatrolMap {
             
             const patrols = await response.json();
             this.updateMap(patrols);
-            this.updateInfoPanel(patrols);
             
         } catch (error) {
             console.error('Ошибка:', error);
-            alert('Не удалось загрузить данные. Проверьте URL и доступ к GitHub.');
         }
     }
     
@@ -55,28 +52,28 @@ class PatrolMap {
         this.markers.forEach(marker => this.map.removeLayer(marker));
         this.markers.clear();
         
-        // Добавляем новые маркеры
+        // Добавляем новые маркеры с кастомными иконками
         patrols.forEach(patrol => {
-            const marker = L.circleMarker([patrol.latitude, patrol.longitude], {
-                radius: 8,
-                fillColor: '#e74c3c',
-                color: '#fff',
-                weight: 2,
-                opacity: 1,
-                fillOpacity: 0.8
+            const customIcon = this.createCustomIcon();
+            
+            const marker = L.marker([patrol.latitude, patrol.longitude], {
+                icon: customIcon
             }).addTo(this.map);
             
             // Всплывающая подсказка
             const popupContent = `
                 <div class="popup-content">
-                    <strong>Патруль ДПС</strong><br>
-                    Пользователь: ${patrol.username}<br>
-                    Время: ${patrol.date}<br>
-                    Координаты: ${patrol.latitude.toFixed(6)}, ${patrol.longitude.toFixed(6)}
+                    <strong>🚓 Патруль ДПС</strong><br>
+                    👤 ${patrol.username}<br>
+                    🕐 ${patrol.date}<br>
+                    📍 ${patrol.latitude.toFixed(6)}, ${patrol.longitude.toFixed(6)}
                 </div>
             `;
             
-            marker.bindPopup(popupContent);
+            marker.bindPopup(popupContent, {
+                className: 'custom-popup',
+                maxWidth: 300
+            });
             
             // Сохраняем маркер
             this.markers.set(`${patrol.latitude}-${patrol.longitude}-${patrol.timestamp}`, marker);
@@ -89,36 +86,14 @@ class PatrolMap {
         }
     }
     
-    updateInfoPanel(patrols) {
-        const updatesList = document.getElementById('updates-list');
-        updatesList.innerHTML = '';
-        
-        // Сортируем по времени (новые сверху)
-        const sortedPatrols = [...patrols].sort((a, b) => b.timestamp - a.timestamp);
-        
-        sortedPatrols.slice(0, 10).forEach(patrol => {
-            const item = document.createElement('div');
-            item.className = 'update-item';
-            item.innerHTML = `
-                <strong>${patrol.username}</strong>: 
-                ${patrol.date} - 
-                ${patrol.latitude.toFixed(4)}, ${patrol.longitude.toFixed(4)}
-            `;
-            updatesList.appendChild(item);
-        });
-    }
-    
-    toggleAutoRefresh(enabled) {
+    startAutoRefresh() {
         if (this.autoRefreshInterval) {
             clearInterval(this.autoRefreshInterval);
-            this.autoRefreshInterval = null;
         }
         
-        if (enabled) {
-            this.autoRefreshInterval = setInterval(() => {
-                this.loadData();
-            }, 30000); // 30 секунд
-        }
+        this.autoRefreshInterval = setInterval(() => {
+            this.loadData();
+        }, 30000); // 30 секунд
     }
 }
 
