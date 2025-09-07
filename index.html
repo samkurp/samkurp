@@ -6,7 +6,7 @@
     <title>Карта патрулей ДПС</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
-        body { margin: 0; padding: 0; }
+        body { margin: 0; padding: 0; font-family: Arial, sans-serif; }
         #map { height: 100vh; width: 100%; }
         .info { padding: 10px; background: white; border-radius: 5px; }
         .refresh-btn {
@@ -14,88 +14,152 @@
             top: 10px;
             right: 10px;
             z-index: 1000;
-            padding: 10px;
+            padding: 10px 15px;
             background: white;
-            border: none;
+            border: 2px solid #007bff;
             border-radius: 5px;
             cursor: pointer;
+            font-weight: bold;
+        }
+        .stats {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border: 2px solid #28a745;
+        }
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div id="map"></div>
     <button class="refresh-btn" onclick="loadData()">🔄 Обновить</button>
+    <div class="stats" id="stats">Загрузка...</div>
+    <div class="loading" id="loading" style="display: none;">Загрузка данных...</div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
         let map;
         let markers = [];
         let patrolData = [];
+        const GITHUB_USERNAME = 'ВАШ_USERNAME'; // ЗАМЕНИТЕ НА СВОЙ
+        const GITHUB_REPO = 'ВАШ_REPO'; // ЗАМЕНИТЕ НА СВОЙ
 
-        // Инициализация карты
         function initMap() {
-            map = L.map('map').setView([55.7558, 37.6173], 10); // Москва по умолчанию
+            map = L.map('map').setView([55.7558, 37.6173], 10);
             
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
             
             loadData();
-            setInterval(loadData, 30000); // Обновление каждые 30 секунд
         }
 
-        // Загрузка данных
         async function loadData() {
+            showLoading(true);
             try {
-                const response = await fetch('data/patrols_data.json');
-                patrolData = await response.json();
+                // Прямая ссылка на raw файл GitHub
+                const timestamp = new Date().getTime();
+                const response = await fetch(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/data/patrols_data.json?t=${timestamp}`);
                 
+                if (!response.ok) {
+                    throw new Error(`Ошибка HTTP: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!Array.isArray(data)) {
+                    throw new Error('Данные не являются массивом');
+                }
+                
+                patrolData = data;
                 updateMap();
                 updateStats();
+                
             } catch (error) {
                 console.error('Ошибка загрузки данных:', error);
+                document.getElementById('stats').innerHTML = 'Ошибка загрузки данных';
+                
+                // Пробуем альтернативный путь
+                try {
+                    const altResponse = await fetch('patrols_data.json');
+                    patrolData = await altResponse.json();
+                    updateMap();
+                    updateStats();
+                    document.getElementById('stats').innerHTML = `🚓 Точек: ${patrolData.length} (локальный файл)`;
+                } catch (altError) {
+                    console.error('Ошибка загрузки локального файла:', altError);
+                }
+            } finally {
+                showLoading(false);
             }
         }
 
-        // Обновление карты
         function updateMap() {
             // Удаляем старые маркеры
             markers.forEach(marker => map.removeLayer(marker));
             markers = [];
 
+            if (patrolData.length === 0) {
+                document.getElementById('stats').innerHTML = 'Нет данных для отображения';
+                return;
+            }
+
             // Добавляем новые маркеры
             patrolData.forEach(point => {
-                const marker = L.marker([point.latitude, point.longitude])
-                    .addTo(map)
-                    .bindPopup(`
-                        <div class="info">
-                            <strong>Патруль ДПС</strong><br>
-                            Время: ${point.date}<br>
-                            Пользователь: ${point.username || 'Аноним'}<br>
-                            Координаты: ${point.latitude.toFixed(6)}, ${point.longitude.toFixed(6)}
-                        </div>
-                    `);
-                
-                markers.push(marker);
+                // Проверяем наличие обязательных полей
+                if (point.latitude && point.longitude) {
+                    const marker = L.marker([point.latitude, point.longitude])
+                        .addTo(map)
+                        .bindPopup(`
+                            <div class="info">
+                                <strong>🚓 Патруль ДПС</strong><br>
+                                Время: ${point.date || 'неизвестно'}<br>
+                                Пользователь: ${point.username || 'Аноним'}<br>
+                                Координаты: ${point.latitude.toFixed(6)}, ${point.longitude.toFixed(6)}
+                            </div>
+                        `);
+                    
+                    markers.push(marker);
+                }
             });
 
-            // Автоматическое приближение если есть точки
-            if (patrolData.length > 0) {
+            if (markers.length > 0) {
                 const group = new L.featureGroup(markers);
                 map.fitBounds(group.getBounds().pad(0.1));
             }
         }
 
-        // Обновление статистики
         function updateStats() {
-            const stats = document.getElementById('stats');
-            if (stats) {
-                stats.innerHTML = `Точек на карте: ${patrolData.length}`;
+            const statsElement = document.getElementById('stats');
+            if (statsElement) {
+                statsElement.innerHTML = `🚓 Точек: ${patrolData.length} | Последнее обновление: ${new Date().toLocaleTimeString()}`;
             }
         }
 
-        // Инициализация при загрузке страницы
+        function showLoading(show) {
+            const loadingElement = document.getElementById('loading');
+            if (loadingElement) {
+                loadingElement.style.display = show ? 'block' : 'none';
+            }
+        }
+
         window.onload = initMap;
+        // Обновление каждые 30 секунд
+        setInterval(loadData, 30000);
     </script>
 </body>
 </html>
