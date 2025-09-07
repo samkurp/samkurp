@@ -2,31 +2,12 @@
   {
     "user_id": 566632214,
     "username": "samkurp",
-    "latitude": 55.398926,
-    "longitude": 37.846537,
-    "timestamp": 1757246324.0,
-    "date": "07 сентября 2025 11:58"
-  },
-  {
-    "user_id": 566632214,
-    "username": "samkurp",
-    "latitude": 55.39435,
-    "longitude": 37.827672,
-    "timestamp": 1757246830.0,
-    "date": "2025-09-07 12:07:10",
-    "severity": 1,
-    "severity_color": "#27ae60",
-    "severity_name": "Низкая"
-  },
-  {
-    "user_id": 1146293556,
-    "username": "Julia_eclipce",
-    "latitude": 55.393818,
-    "longitude": 37.825946,
-    "timestamp": 1757247628.0,
-    "date": "2025-09-07 12:20:28",
-    "severity": 2,
-    "severity_color": "#f39c12",
-    "severity_name": "Средняя"
+    "latitude": 55.406824,
+    "longitude": 37.787983,
+    "timestamp": 1757265095.0,
+    "date": "2025-09-07 17:11:35",
+    "severity": 3,
+    "severity_color": "#e74c3c",
+    "severity_name": "Высокая"
   }
 ]
