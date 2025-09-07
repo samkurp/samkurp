@@ -2,7 +2,7 @@ class PatrolMap {
     constructor() {
         this.map = null;
         this.markers = new Map();
-        this.dataUrl = 'https://raw.githubusercontent.com/samkurp/samkurp/main/data/patrols.json';
+        this.dataUrl = 'https://raw.githubusercontent.com/samkurp/samkurp/main/patrols_data.json';
         this.autoRefreshInterval = null;
         
         this.initMap();
