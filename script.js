@@ -21,10 +21,10 @@ class PatrolMap {
         }).addTo(this.map);
     }
     
-    createCustomIcon() {
+    createCustomIcon(severityColor) {
         return L.divIcon({
             className: 'patrol-marker',
-            html: '<div class="marker-icon"></div>',
+            html: `<div class="marker-icon" style="background-color: ${severityColor};"></div>`,
             iconSize: [32, 32],
             iconAnchor: [16, 16]
         });
@@ -54,7 +54,8 @@ class PatrolMap {
         
         // Добавляем новые маркеры с кастомными иконками
         patrols.forEach(patrol => {
-            const customIcon = this.createCustomIcon();
+            const severityColor = patrol.severity_color || '#e74c3c'; // По умолчанию красный
+            const customIcon = this.createCustomIcon(severityColor);
             
             const marker = L.marker([patrol.latitude, patrol.longitude], {
                 icon: customIcon
@@ -65,6 +66,7 @@ class PatrolMap {
                 <div class="popup-content">
                     <strong>🚓 Патруль ДПС</strong><br>
                     👤 ${patrol.username}<br>
+                    🚔 Уровень: ${patrol.severity_name || 'Не указан'}<br>
                     🕐 ${patrol.date}<br>
                     📍 ${patrol.latitude.toFixed(6)}, ${patrol.longitude.toFixed(6)}
                 </div>
