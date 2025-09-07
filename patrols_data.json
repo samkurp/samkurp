@@ -1,34 +1,18 @@
 [
   {
-    "user_id": 1146293556,
-    "username": "Julia_eclipce",
-    "latitude": 55.394099,
-    "longitude": 37.827884,
-    "timestamp": 1757228043.0,
-    "date": "2025-09-07 06:54:03"
-  },
-  {
-    "user_id": 566632214,
-    "username": "samkurp",
-    "latitude": 55.426866,
-    "longitude": 37.889311,
-    "timestamp": 1757228425.0,
-    "date": "2025-09-07 07:00:25"
-  },
-  {
-    "user_id": 566632214,
-    "username": "samkurp",
-    "latitude": 55.396851,
-    "longitude": 37.802114,
-    "timestamp": 1757233450.0,
-    "date": "2025-09-07 08:24:10"
-  },
-  {
     "user_id": 566632214,
     "username": "samkurp",
     "latitude": 55.393428,
     "longitude": 37.809094,
     "timestamp": 1757239613.0,
     "date": "2025-09-07 10:06:53"
+  },
+  {
+    "user_id": 566632214,
+    "username": "samkurp",
+    "latitude": 55.377553,
+    "longitude": 37.825583,
+    "timestamp": 1757242933.0,
+    "date": "07 сентября 2025 11:02"
   }
 ]
