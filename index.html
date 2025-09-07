@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта патрулей ДПС</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { height: 100vh; width: 100%; }
+        .info { padding: 10px; background: white; border-radius: 5px; }
+        .refresh-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            padding: 10px;
+            background: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <button class="refresh-btn" onclick="loadData()">🔄 Обновить</button>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        let map;
+        let markers = [];
+        let patrolData = [];
+
+        // Инициализация карты
+        function initMap() {
+            map = L.map('map').setView([55.7558, 37.6173], 10); // Москва по умолчанию
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+            
+            loadData();
+            setInterval(loadData, 30000); // Обновление каждые 30 секунд
+        }
+
+        // Загрузка данных
+        async function loadData() {
+            try {
+                const response = await fetch('data/patrols_data.json');
+                patrolData = await response.json();
+                
+                updateMap();
+                updateStats();
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+            }
+        }
+
+        // Обновление карты
+        function updateMap() {
+            // Удаляем старые маркеры
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+
+            // Добавляем новые маркеры
+            patrolData.forEach(point => {
+                const marker = L.marker([point.latitude, point.longitude])
+                    .addTo(map)
+                    .bindPopup(`
+                        <div class="info">
+                            <strong>Патруль ДПС</strong><br>
+                            Время: ${point.date}<br>
+                            Пользователь: ${point.username || 'Аноним'}<br>
+                            Координаты: ${point.latitude.toFixed(6)}, ${point.longitude.toFixed(6)}
+                        </div>
+                    `);
+                
+                markers.push(marker);
+            });
+
+            // Автоматическое приближение если есть точки
+            if (patrolData.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+
+        // Обновление статистики
+        function updateStats() {
+            const stats = document.getElementById('stats');
+            if (stats) {
+                stats.innerHTML = `Точек на карте: ${patrolData.length}`;
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        window.onload = initMap;
+    </script>
+</body>
+</html>
