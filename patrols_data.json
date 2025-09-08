@@ -2,12 +2,12 @@
   {
     "user_id": 566632214,
     "username": "samkurp",
-    "latitude": 55.406824,
-    "longitude": 37.787983,
-    "timestamp": 1757265095.0,
-    "date": "2025-09-07 17:11:35",
-    "severity": 3,
-    "severity_color": "#e74c3c",
-    "severity_name": "Высокая"
+    "latitude": 55.394308,
+    "longitude": 37.827838,
+    "timestamp": 1757296356.0,
+    "date": "2025-09-08 01:52:36",
+    "severity": 1,
+    "severity_color": "#27ae60",
+    "severity_name": "Низкая"
   }
 ]
